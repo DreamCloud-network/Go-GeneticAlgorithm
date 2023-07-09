@@ -34,7 +34,7 @@ func NewGenes() *DoubleGenes {
 	// Poppulate with random actions
 	for _, strand := range newGenes.Strands {
 		for i := 0; i < len(strand); i++ {
-			strand[i] = genome.Action(r1.Intn(int(genome.Pickup + 1)))
+			strand[i] = genome.Action(r1.Intn(int(genome.DoNothing + 1)))
 		}
 	}
 	return &newGenes
@@ -108,7 +108,7 @@ func (gene *DoubleGenes) mutate() {
 
 		posMutation := r1.Intn(len(gene.Strands[strandToMutate])-1) + 1
 
-		gene.Strands[strandToMutate][posMutation] = genome.Action(r1.Intn(int(genome.Pickup + 1)))
+		gene.Strands[strandToMutate][posMutation] = genome.Action(r1.Intn(int(genome.DoNothing + 1)))
 	}
 
 }

@@ -39,7 +39,7 @@ func NewGenes() *DoubleGenes {
 				newGene = dna.NewGene(true)
 			}
 
-			action := genome.Action(r1.Intn(int(genome.Pickup + 1)))
+			action := genome.Action(r1.Intn(int(genome.DoNothing + 1)))
 			newGene.Code = append(newGene.Code, dna.Codon(action))
 
 			strand[i] = newGene
@@ -65,10 +65,16 @@ func (genes *DoubleGenes) Duplicate() genome.Genes {
 // String returns a string representation of the Genes
 func (genes *DoubleGenes) String() string {
 	str := ""
-	for _, strand := range genes.Strands {
+	for cont, strand := range genes.Strands {
 		str += "\n\r-> "
-		for _, gene := range strand {
-			if gene.Dominance == dna.Recessive {
+		var otherStrand int
+		if cont == 0 {
+			otherStrand = 1
+		} else {
+			otherStrand = 0
+		}
+		for pos, gene := range strand {
+			if gene.Code[0] > genes.Strands[otherStrand][pos].Code[0] {
 				str += "a-"
 			} else {
 				str += "A-"
@@ -83,13 +89,20 @@ func (genes *DoubleGenes) String() string {
 // Sequence returns a string representation of the Genes into a sequence of numbers
 func (genes *DoubleGenes) Sequence() string {
 	str := ""
-	for _, strand := range genes.Strands {
-		str += "\n\r-> "
-		for _, gene := range strand {
-			if gene.Dominance == dna.Recessive {
-				str += "a"
+	for cont, strand := range genes.Strands {
+		str += "\n\r->"
+		var otherStrand int
+		if cont == 0 {
+			otherStrand = 1
+		} else {
+			otherStrand = 0
+		}
+
+		for pos, gene := range strand {
+			if gene.Code[0] > genes.Strands[otherStrand][pos].Code[0] {
+				str += " a-"
 			} else {
-				str += "A"
+				str += " A-"
 			}
 
 			str += strconv.Itoa(int(gene.Code[0]))
@@ -119,7 +132,7 @@ func (gene *DoubleGenes) mutate() {
 			newGene = dna.NewGene(true)
 		}
 
-		action := genome.Action(r1.Intn(int(genome.Pickup + 1)))
+		action := genome.Action(r1.Intn(int(genome.DoNothing + 1)))
 		newGene.Code = append(newGene.Code, dna.Codon(action))
 
 		log.Println("Mutated Gene: ", gene.Strands[strandToMutate][posMutation].String())
@@ -134,8 +147,12 @@ func (genes *DoubleGenes) GetActions() []genome.Action {
 	actions := make([]genome.Action, 200)
 
 	for i := 0; i < len(actions); i++ {
-		expression := genes.Strands[0][i].ReturnGeneExpressionFromAlleles(genes.Strands[1][i])
-		actions[i] = genome.Action(expression.Code[0])
+		if genes.Strands[0][i].Code[0] < genes.Strands[1][i].Code[0] {
+			actions[i] = genome.Action(genes.Strands[0][i].Code[0])
+		} else {
+			actions[i] = genome.Action(genes.Strands[1][i].Code[0])
+
+		}
 	}
 	return actions
 }

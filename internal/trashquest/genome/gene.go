@@ -12,13 +12,13 @@ var (
 type Action int
 
 const (
-	StepNorth Action = iota
+	Pickup Action = iota
+	StepNorth
 	StepSouth
 	StepEast
 	StepWest
 	RandomMove
 	DoNothing
-	Pickup
 )
 
 func (m Action) String() string {
@@ -49,4 +49,5 @@ type Genes interface {
 	Mate(genesPartner Genes) []Genes
 	Duplicate() Genes
 	Sequence() string
+	String() string
 }

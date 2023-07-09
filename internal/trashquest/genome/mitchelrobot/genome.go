@@ -26,7 +26,7 @@ func NewGenes() *MitchelGene {
 	r1 := rand.New(s1)
 
 	for i := 0; i < len(newGenes.Actions); i++ {
-		newGenes.Actions[i] = genome.Action(r1.Intn(int(genome.Pickup + 1)))
+		newGenes.Actions[i] = genome.Action(r1.Intn(int(genome.DoNothing + 1)))
 	}
 	return &newGenes
 }
@@ -75,7 +75,7 @@ func (gene *MitchelGene) mutate() {
 		log.Println("!!! MUTATION !!!")
 		posMutation := r1.Intn(len(gene.Actions))
 
-		gene.Actions[posMutation] = genome.Action(r1.Intn(int(genome.Pickup + 1)))
+		gene.Actions[posMutation] = genome.Action(r1.Intn(int(genome.DoNothing + 1)))
 	}
 
 }
