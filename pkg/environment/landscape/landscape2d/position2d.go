@@ -114,6 +114,19 @@ func (position *Position2D) HasThing(thing landscape.Thing) bool {
 
 //------------------------------------------------------------
 
+func (position *Position2D) HasThingType(thingType thingstype.ThingType) bool {
+	position.Lock()
+	defer position.Unlock()
+
+	for _, thingInPosition := range position.things {
+		if thingInPosition.GetType() == thingType {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (position *Position2D) AddThing(thing landscape.Thing) {
 	position.Lock()
 	defer position.Unlock()
@@ -139,10 +152,10 @@ func (position *Position2D) GetThingsByType(thingType thingstype.ThingType) []la
 
 // RemoveThingByID remove a thing from the position using its ID
 func (position *Position2D) RemoveThing(thingToRemove landscape.Thing) landscape.Thing {
-	var removedThing landscape.Thing
-
 	position.Lock()
 	defer position.Unlock()
+
+	var removedThing landscape.Thing
 
 	for cont, thingInPosition := range position.things {
 		if thingInPosition.GetID() == thingToRemove.GetID() {

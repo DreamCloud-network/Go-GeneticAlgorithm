@@ -4,16 +4,16 @@ import (
 	"strconv"
 )
 
+type Codon byte
+
 type Gene struct {
 	Code []Codon
 }
 
-func NewGene(dominant bool) *Gene {
-	newGene := Gene{
+func NewGene() Gene {
+	return Gene{
 		Code: make([]Codon, 0),
 	}
-
-	return &newGene
 }
 
 func (gene *Gene) String() string {

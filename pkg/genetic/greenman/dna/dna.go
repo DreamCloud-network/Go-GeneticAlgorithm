@@ -1,11 +1,5 @@
 package dna
 
-import "errors"
-
-var (
-	ErrOutOfRange = errors.New("out of range")
-)
-
 type DNA struct {
 	Genes []Gene `json:"genes"`
 }
@@ -26,4 +20,13 @@ func (dna *DNA) Duplicate() *DNA {
 	}
 
 	return &newDNA
+}
+
+func (dna *DNA) String() string {
+	str := ""
+	for num := range dna.Genes {
+		str += "\n\r" + dna.Genes[num].String()
+	}
+
+	return str
 }

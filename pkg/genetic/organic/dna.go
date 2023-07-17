@@ -22,19 +22,14 @@ type Gene struct {
 	Codons []Codon
 }
 
-type Allele struct {
+type Strand struct {
 	Genes []Gene
 }
 
-type Strand struct {
-	Alleles []Allele
+type SingleHelixDNA struct {
+	Strands Strand
 }
 
-type DNA struct {
+type DoubleHelixDNA struct {
 	Strands [2]Strand
-}
-
-type Chromosomes struct {
-	Father *DNA
-	Mother *DNA
 }

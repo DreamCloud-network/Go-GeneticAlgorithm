@@ -1,4 +1,4 @@
-package mitchelrobot2
+package robby
 
 import (
 	"log"
@@ -11,7 +11,7 @@ func TestEvolve(t *testing.T) {
 	// Generate the inital population
 	population := PrepareInitialPopulation(200)
 
-	err := population.Evolve(5)
+	err := population.Evolve(200)
 	if err != nil {
 		log.Println("Error evolving population")
 		log.Println(err)
@@ -27,10 +27,9 @@ func TestMate(t *testing.T) {
 	robot1 := NewMitchelRobot()
 	robot2 := NewMitchelRobot()
 
-	children := robot1.Mate(robot2)
+	child := robot1.Mate(robot2)
 
 	log.Println("Robot 1: ", robot1.Genes.Sequence())
 	log.Println("Robot 2: ", robot2.Genes.Sequence())
-	log.Println("Child 1: ", children[0].Genes.Sequence())
-	log.Println("Child 2: ", children[1].Genes.Sequence())
+	log.Println("Child: ", child[0].Genes.Sequence())
 }
