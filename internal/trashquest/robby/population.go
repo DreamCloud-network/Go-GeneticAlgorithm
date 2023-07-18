@@ -1,11 +1,9 @@
 package robby
 
 import (
-	"encoding/csv"
 	"log"
 	"math"
 	"math/rand"
-	"os"
 	"sort"
 	"strconv"
 	"sync"
@@ -36,6 +34,7 @@ func PrepareInitialPopulation(initialPopulation int) *RobotPopulation {
 type RobotPopulation struct {
 	robots            []*Robby
 	InitialPopulation int
+	Generation        int
 }
 
 // CreateNewPopulation returns a new population with initialPopulation number of individuals
@@ -44,6 +43,7 @@ func GenerateInitialPopulation() RobotPopulation {
 	newPopulation := RobotPopulation{
 		robots:            nil,
 		InitialPopulation: 0,
+		Generation:        0,
 	}
 
 	return newPopulation
@@ -135,6 +135,102 @@ func (population *RobotPopulation) PrintIndividualsFintess() {
 	}
 }
 
+/*
+// This Mate function version kills the half worst population and keep exactly the same best half for the next iteration.
+func (population *RobotPopulation) Mate() {
+	// Generate a new population
+	var newRobots []*Robby
+
+	fitnessPoints := make([]float64, len(population.robots)/2)
+	minFitness := 0.0
+	for i := range fitnessPoints {
+		fitnessPoints[i] = population.robots[i].Fitness
+		if fitnessPoints[i] < minFitness {
+			minFitness = fitnessPoints[i]
+		}
+	}
+
+	// Squaring normalization of the fitness points
+	totalFitnessPoints := 0.0
+	for i := range fitnessPoints {
+		fitnessPoints[i] -= minFitness
+		fitnessPoints[i] = math.Pow(fitnessPoints[i], 2)
+		totalFitnessPoints += fitnessPoints[i]
+	}
+
+	for i := range fitnessPoints {
+		fitnessPoints[i] = fitnessPoints[i] / totalFitnessPoints
+	}
+
+	// Fills the new population with the best half actual individuals
+	for i := 0; i < len(population.robots)/2; i++ {
+		newRobots = append(newRobots, population.robots[i])
+	}
+
+	for len(newRobots) < population.InitialPopulation {
+
+		positionPartner1 := 0
+		positionPartner2 := 0
+
+		// Select first partner
+		bestRobbot := len(fitnessPoints) - 1
+		for cont := 0; cont < 15; cont++ {
+			s1 := rand.NewSource(time.Now().UnixNano())
+			r1 := rand.New(s1)
+			r := r1.Float64()
+			accumulatedWeight := 0.0
+
+			for i, weight := range fitnessPoints {
+				accumulatedWeight += weight
+				if r < accumulatedWeight {
+					if i < bestRobbot {
+						bestRobbot = i
+					}
+					break
+				}
+			}
+
+		}
+
+		positionPartner1 = bestRobbot
+
+		// Select second partner
+		bestRobbot = len(fitnessPoints) - 1
+		for cont := 0; cont < 15; cont++ {
+			s1 := rand.NewSource(time.Now().UnixNano())
+			r1 := rand.New(s1)
+			r := r1.Float64()
+			accumulatedWeight := 0.0
+			for i, weight := range fitnessPoints {
+				accumulatedWeight += weight
+				if r < accumulatedWeight {
+					if i < bestRobbot {
+						bestRobbot = i
+					}
+					break
+				}
+			}
+		}
+		positionPartner2 = bestRobbot
+
+		if positionPartner1 == positionPartner2 {
+			positionPartner2++
+		}
+
+		//log.Println("Partner 1: ", positionPartner1, "- Partner 2: ", positionPartner2)
+
+		partner1 := population.robots[positionPartner1]
+		partner2 := population.robots[positionPartner2]
+
+		children := partner1.Mate(partner2)
+		newRobots = append(newRobots, children...)
+	}
+
+	population.robots = newRobots
+}
+*/
+
+// This Mate function implements the same algorithm described by Mitchell in his book.
 func (population *RobotPopulation) Mate() {
 	// Generate a new population
 	var newRobots []*Robby
@@ -222,87 +318,38 @@ func (population *RobotPopulation) Mate() {
 	population.robots = newRobots
 }
 
-// Evolve generates a new population based on the better individuals of the current population
-func (population *RobotPopulation) Evolve(generations int) error {
-	csvFile, err := os.Create("robbyEvolution.csv")
-	if err != nil {
-		log.Fatalf("robot.Evolve - Failed creating file.")
-		return err
+// Evolve generates a new population based on the better individuals of the current population. This function returns a string with the information of the generation.
+// The string contains the generation number, the average fitness of the population, the best fitness and the worst fitness:
+// GenerationNumber, AverageFitness, BestFitness, WorstFitness
+func (population *RobotPopulation) Evolve() []string {
+
+	// Just execute the mate after the first generation
+	start := time.Now()
+	if population.Generation > 0 {
+		population.Mate()
 	}
-	csvwriter := csv.NewWriter(csvFile)
+	mateTime := time.Since(start)
 
-	record := []string{"Generation", "Average Fitness", "Best Fitness", "Worst Fitness"}
-	csvwriter.Write(record)
-	if err != nil {
-		log.Fatalf("robot.Evolve - Failed writting file.")
-	}
+	start = time.Now()
+	population.Evaluate()
+	evaluateTime := time.Since(start)
 
-	for i := 0; i < generations; i++ {
+	population.sortPopulation()
 
-		start := time.Now()
-		if i > 0 {
-			population.Mate()
-		}
-		mateTime := time.Since(start)
+	record := []string{strconv.Itoa(population.Generation), strconv.FormatFloat(population.GetAverageFitness(), 'f', 2, 64),
+		strconv.FormatFloat(population.robots[0].Fitness, 'f', 2, 64), strconv.FormatFloat(population.robots[199].Fitness, 'f', 2, 64)}
 
-		start = time.Now()
-		population.Evaluate()
-		evaluateTime := time.Since(start)
+	log.Println("=====================")
+	log.Println("Generation: ", record[0])
+	log.Println("Avarage fitness: ", record[1])
+	log.Println("Best fitness: ", record[2])
+	log.Println("Worst fitness: ", record[3])
+	log.Println("=====================")
+	log.Printf("Evaluate took %s", evaluateTime)
+	log.Printf("Mate population took %s", mateTime)
+	log.Println("=====================")
 
-		population.sortPopulation()
+	population.Generation++
 
-		record := []string{strconv.Itoa(i), strconv.FormatFloat(population.GetAverageFitness(), 'f', 2, 64),
-			strconv.FormatFloat(population.robots[0].Fitness, 'f', 2, 64), strconv.FormatFloat(population.robots[199].Fitness, 'f', 2, 64)}
-
-		log.Println("=====================")
-		log.Println("Generation: ", record[0])
-		log.Println("Avarage fitness: ", record[1])
-		log.Println("Best fitness: ", record[2])
-		log.Println("Worst fitness: ", record[3])
-		log.Println("=====================")
-		log.Printf("Evaluate took %s", evaluateTime)
-		log.Printf("Mate population took %s", mateTime)
-		log.Println("=====================")
-
-		csvwriter.Write(record)
-		if err != nil {
-			log.Fatalf("robot.Evolve - Failed writting file.")
-		}
-		csvwriter.Flush()
-	}
-
-	/*log.Println("=====================")
-	log.Println("Fitness distribution:")
-	for cont, robot := range population.robots {
-		log.Println("Robot position: ", cont, " - Fitness: ", robot.Fitness)
-	}
-	log.Println("=====================")*/
-	return nil
+	return record
 }
-
-/*
-func (population *RobotPopulation) LoadDNAs(dnas []*dna.DNA) error {
-
-	if dnas == nil {
-		log.Println("mitchelga.Population.LoadDNAs - DNAs vector is nil.")
-		return ErrorStrandsEmpty
-	}
-
-	if len(dnas) < (len(population.robots) * 2) {
-		log.Println("mitchelga.Population.LoadDNAs - DNA vector not big enought.")
-		return ErrorStrandsInvalid
-	}
-
-	dnaCont := 0
-	for cont := range population.robots {
-		err := population.robots[cont].Genes.LoadDNA(dnas[dnaCont : dnaCont+2])
-		if err != nil {
-			log.Println("mitchelga.Population.LoadDNAs - Error loading DNA")
-			return err
-		}
-		dnaCont += 2
-	}
-
-	return nil
-}
-*/

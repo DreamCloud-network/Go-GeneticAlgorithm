@@ -27,6 +27,7 @@ func (genes *MitchelGene) PopulateRandomActions() {
 
 	for i := 0; i < len(genes.Strand); i++ {
 		genes.Strand[i] = Action(r1.Intn(int(DoNothing + 1)))
+		//genes.Strand[i] = Action(r1.Intn(int(DoNothing))) // Exclude DoNothing
 	}
 }
 
@@ -69,6 +70,7 @@ func (gene *MitchelGene) mutate() {
 		if r1.Float64() < mutationChance {
 			//log.Println("!!! MUTATION !!!")
 			gene.Strand[pos] = Action(r1.Intn(int(DoNothing + 1)))
+			//gene.Strand[pos] = Action(r1.Intn(int(DoNothing))) // Exclude DoNothing
 		}
 	}
 

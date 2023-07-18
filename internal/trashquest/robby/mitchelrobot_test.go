@@ -11,7 +11,7 @@ func TestEvolve(t *testing.T) {
 	// Generate the inital population
 	population := PrepareInitialPopulation(200)
 
-	err := population.Evolve(200)
+	err := population.Evolve()
 	if err != nil {
 		log.Println("Error evolving population")
 		log.Println(err)
