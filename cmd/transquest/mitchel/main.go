@@ -26,7 +26,7 @@ func main() {
 
 	initialBestFitness := 0.0
 
-	for initialBestFitness < 500 {
+	for initialBestFitness < 16 {
 		csvLine := population.Evolve()
 
 		initialBestFitness = population.GetIndividuals()[0].Fitness
@@ -34,6 +34,8 @@ func main() {
 		fileutils.CSVAppendLine(csfFile, csvLine)
 	}
 
+	GenesStr := []string{"Best robot DNA: " + population.GetIndividuals()[0].Genes.String()}
+	fileutils.CSVAppendLine(csfFile, GenesStr)
+
 	population.GetIndividuals()[0].ReplayASCII()
-	log.Println(population.GetIndividuals()[0].Genes.String())
 }

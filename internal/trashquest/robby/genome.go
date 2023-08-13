@@ -1,8 +1,11 @@
 package robby
 
 import (
+	"log"
 	"math/rand"
+	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -109,4 +112,39 @@ func (genes *MitchelGene) GetAction(positionSignature int) Action {
 	}
 
 	return Action(genes.Strand[positionSignature])
+}
+
+func LoadGnomeFile(fileNamePath string) (*MitchelGene, error) {
+
+	genes, err := os.ReadFile(fileNamePath)
+	if err != nil {
+		log.Println("robby.LoadGnomeFile: error reading file.")
+		return nil, err
+	}
+
+	parts := strings.Split(string(genes), "|")
+
+	loadGenes := NewGenes()
+
+	for i, part := range parts {
+		switch part {
+		case "StepNorth":
+			loadGenes.Strand[i] = StepNorth
+		case "StepSouth":
+			loadGenes.Strand[i] = StepSouth
+		case "StepEast":
+			loadGenes.Strand[i] = StepEast
+		case "StepWest":
+			loadGenes.Strand[i] = StepWest
+		case "RandomMove":
+			loadGenes.Strand[i] = RandomMove
+		case "DoNothing":
+			loadGenes.Strand[i] = DoNothing
+		case "Pickup":
+			loadGenes.Strand[i] = Pickup
+		default:
+			return nil, ErrorInvalidAction
+		}
+	}
+	return &loadGenes, nil
 }

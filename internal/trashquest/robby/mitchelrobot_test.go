@@ -33,3 +33,28 @@ func TestMate(t *testing.T) {
 	log.Println("Robot 2: ", robot2.Genes.Sequence())
 	log.Println("Child: ", child[0].Genes.Sequence())
 }
+
+func TestReadingGenesFromFile(t *testing.T) {
+	t.Log("TestReadingGenesFromFile")
+
+	loadedGenes, err := LoadGnomeFile("mitchelRobot_original.genes")
+	if err != nil {
+		t.Fatal("Error reading file: ", err)
+	}
+
+	t.Log("Loaded genes: ", loadedGenes.String())
+}
+
+func TestReplayFromLoadedGenes(t *testing.T) {
+	t.Log("TestreplayFromLoadedGenes")
+
+	loadedGenes, err := LoadGnomeFile("mitchelRobot_original.genes")
+	if err != nil {
+		t.Fatal("Error reading file: ", err)
+	}
+
+	robot := NewMitchelRobot()
+	robot.Genes.Strand = loadedGenes.Strand
+
+	robot.ReplayASCII()
+}
