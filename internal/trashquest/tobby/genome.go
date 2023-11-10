@@ -3,226 +3,127 @@ package tobby
 import (
 	"log"
 	"math/rand"
-	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/fedas"
+	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
+	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
+	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
 )
 
-const mutationChance = 0.000001 // /%
+const mutationChance = 0.00001 //0.000001 // /%
 const actionStrandLength = 243
-const lifeSpanStrandLength = 1
-const numSpermatids = 100000000
 
 type TobbyGene struct {
-	Regulator greenman.HomologousChromosomes
-	Actions   greenman.HomologousChromosomes
+	Actions dnastrand.DNAStrand
 }
 
-type TobbyGametes struct {
-	Regulator *greenman.Chromosome
-	Actions   *greenman.Chromosome
-}
-
-// Create and return a new Regulator chromosome with 1 point of crossover
-func newRegulatorChromosome() *greenman.Chromosome {
-
-	newGenes := greenman.NewChromosome()
-
-	// CrossOverPoints Gene
-	newGenes.Genes = append(newGenes.Genes, greenman.NewGene())
-	newGenes.Genes[0].AppendFeda(fedas.Feda(1))
-
-	return &newGenes
-}
-
-func newActionsChromosome() *greenman.Chromosome {
-
-	newGenes := greenman.NewChromosome()
-
-	// CrossOverPoints Gene
-	newGenes.Genes = make([]greenman.Gene, actionStrandLength)
-	for genePos := range newGenes.Genes {
-		newGenes.Genes[genePos] = greenman.NewGene()
-	}
-
-	return &newGenes
-}
-
-func NewGenes() *TobbyGene {
+func NewEmptyGenes() *TobbyGene {
 
 	newGenes := TobbyGene{
-		Regulator: greenman.NewHomologousChromosomes(newRegulatorChromosome(), newRegulatorChromosome()),
-		Actions:   greenman.NewHomologousChromosomes(newActionsChromosome(), newActionsChromosome()),
+		Actions: dnastrand.NewDNAStrand(),
 	}
 
 	return &newGenes
 }
 
-// Initialize the genome code with ramdom values for all chromosomes
-func (genes *TobbyGene) RamdomizeGenes() {
-	r1 := rand.New(rand.NewSource(time.Now().UnixNano()))
+func NewRandomGenes() *TobbyGene {
 
-	// Regulator - CrossOverPoints
-	genes.Regulator.Father.Genes[0].ResetCode()
-	genes.Regulator.Father.Genes[0].AppendFeda(fedas.Feda(r1.Intn(actionStrandLength-1) + 1))
-
-	genes.Regulator.Mother.Genes[0].ResetCode()
-	genes.Regulator.Mother.Genes[0].AppendFeda(fedas.Feda(r1.Intn(actionStrandLength-1) + 1))
-
-	// Actions
-	for genePos := range genes.Actions.Father.Genes {
-		genes.Actions.Father.Genes[genePos].ResetCode()
-		genes.Actions.Father.Genes[genePos].AppendFeda(fedas.Feda(r1.Intn(int(Pickup)) + 1))
+	newGenes := TobbyGene{
+		Actions: dnastrand.NewDNAStrand(),
 	}
 
-	for genePos := range genes.Actions.Mother.Genes {
-		genes.Actions.Mother.Genes[genePos].ResetCode()
-		genes.Actions.Mother.Genes[genePos].AppendFeda(fedas.Feda(r1.Intn(int(Pickup)) + 1))
+	for cont := 0; cont < actionStrandLength; cont++ {
+		newGenes.Actions = append(newGenes.Actions, *NewRandomActionGene())
 	}
+
+	return &newGenes
 }
 
-/*
+// Translate the gene code into an actions.
+// Return error if the code doesn´t correspondt to any action
+func translateGeneIntoAction(actionGene genes.Gene) (Action, error) {
+
+	// All the actions have only three bases
+	// First see if the gene size is ok - 1 + 2 (init and end)
+	geneCode := actionGene.GetCode()
+	if len(geneCode) != 3 {
+		log.Println("tobby.TobbyGene.translateGeneIntoAction - Error translating gene into action.")
+		return Action(codons.EMPTY_CODON), ErrorInvalidAction
+	}
+
+	// Read the codon that corresponds to the action.
+	newAction := Action(geneCode[1])
+
+	if newAction.IsValid() {
+		return newAction, nil
+	}
+
+	return Action(codons.EMPTY_CODON), ErrorInvalidAction
+}
+
 // String returns a string representation of the Genes
 func (genes *TobbyGene) ActionString() string {
 	var str string
 
-	for geneCont := range genes.Actions.Genes {
-		code, err := genes.Actions.Genes[geneCont].ReadCode(1)
-		if err != nil {
-			code = fedas.Peith
-		}
+	for geneCont, gene := range genes.Actions {
 
+		action, err := translateGeneIntoAction(gene)
+		if err != nil {
+			log.Println("tobby.TobbyGene.ActionString - Error translating gene into action.")
+			return ""
+		}
 		if geneCont == 0 {
-			str = Action(code).String()
+			str = action.String()
 		} else {
-			newAction := Action(code).String()
-			str = str + "|" + newAction
+			str = str + "|" + action.String()
 		}
 	}
 	return str
 }
-*/
 
 // Return the action based in the robot activations in the position (positionSignature).
 // The function takes in consideration that the action with grater number is dominant over the other.
 func (genes *TobbyGene) GetAction(positionSignature int) Action {
 	if positionSignature >= actionStrandLength {
-		return 0
+		return DoNothing
 	}
 
-	fatherGeneAction, err := genes.Actions.Father.Genes[positionSignature].ReadCode(1)
+	action, err := translateGeneIntoAction(genes.Actions[positionSignature])
 	if err != nil {
-		log.Println("tobby.GetAction - Error reading father gene")
-		return 0
+		log.Println("tobby.TobbyGene.GetAction - Error translating gene into action.")
+		return DoNothing
 	}
 
-	motherGeneAction, err := genes.Actions.Mother.Genes[positionSignature].ReadCode(1)
-	if err != nil {
-		log.Println("tobby.GetAction - Error reading mother gene")
-		return 0
-	}
-
-	if fatherGeneAction > motherGeneAction {
-		return Action(fatherGeneAction)
-	}
-
-	return Action(motherGeneAction)
-}
-
-// Return the crossover point taking in account that the a crossover point value grater is dominant.
-func (genes *TobbyGene) getCrossOverPoint() int {
-	fatherCrossOverPoint, err := genes.Regulator.Father.Genes[0].ReadCode(1)
-	if err != nil {
-		log.Println("tobby.GetCrossOverPoint - Error reading father gene")
-		return 0
-	}
-
-	motherCrossOverPoint, err := genes.Regulator.Mother.Genes[0].ReadCode(1)
-	if err != nil {
-		log.Println("tobby.GetCrossOverPoint - Error reading mother gene")
-		return 0
-	}
-
-	if fatherCrossOverPoint > motherCrossOverPoint {
-		return int(fatherCrossOverPoint)
-	}
-
-	return int(motherCrossOverPoint)
-}
-
-// Generate the Tobby spermatids with two chromosomes (Regulator and Actions) each.
-func (genes *TobbyGene) GenerateSpermatidsGenes() []TobbyGametes {
-	spermatids := make([]TobbyGametes, 0, numSpermatids)
-
-	for len(spermatids) < numSpermatids {
-		regulatorChromatids, err := genes.Regulator.GenerateSpermatidsGenes(genes.getCrossOverPoint())
-		if err != nil {
-			log.Println("tobby.Mate - Error generating spermatoids for regulator.")
-			return nil
-		}
-
-		actionsChromatids, err := genes.Actions.GenerateSpermatidsGenes(genes.getCrossOverPoint())
-		if err != nil {
-			log.Println("tobby.Mate - Error generating spermatoids for actions.")
-			return nil
-		}
-
-		for cont := range regulatorChromatids {
-			newSpermatid := TobbyGametes{
-				Regulator: &regulatorChromatids[cont],
-				Actions:   &actionsChromatids[cont],
-			}
-
-			spermatids = append(spermatids, newSpermatid)
-		}
-	}
-
-	return spermatids
-}
-
-// Generate a Tobby ootide with two chromosomes (Regulator and Actions) each.
-func (genes *TobbyGene) GenerateOotidGenes() *TobbyGametes {
-	regulatorOotid, err := genes.Regulator.GenerateOotidGenes(genes.getCrossOverPoint())
-	if err != nil {
-		log.Println("tobby.GenerateOotidGenes - Error generating ootid for regulator.")
-		return nil
-	}
-
-	actionOotid, err := genes.Actions.GenerateOotidGenes(genes.getCrossOverPoint())
-	if err != nil {
-		log.Println("tobby.GenerateOotidGenes - Error generating ootid for actions.")
-		return nil
-	}
-
-	return &TobbyGametes{
-		Regulator: &regulatorOotid,
-		Actions:   &actionOotid,
-	}
+	return action
 }
 
 // Return a new genome from mating a father and a mother genomes.
-func (father *TobbyGene) Mate(mother *TobbyGene) *TobbyGene {
+func (mother *TobbyGene) Mate(father *TobbyGene) *TobbyGene {
+	newChild1 := NewEmptyGenes()
+	newChild2 := NewEmptyGenes()
 
-	spermatids := father.GenerateSpermatidsGenes()
+	newChild1.Actions = make([]genes.Gene, len(father.Actions))
+	copy(newChild1.Actions, father.Actions)
 
-	ootid := mother.GenerateOotidGenes()
+	newChild2.Actions = make([]genes.Gene, len(mother.Actions))
+	copy(newChild2.Actions, mother.Actions)
 
-	if spermatids == nil || ootid == nil {
-		log.Println("tobby.Mate - Error generating spermatoids or ootid.")
-		return nil
+	newChild1.Actions.Crossover(&newChild2.Actions)
+
+	// Randomly select one child gene to generate a child
+	if rand.Intn(2) == 0 {
+		newChild1.Mutate()
+		return newChild1
+	} else {
+		newChild2.Mutate()
+		return newChild2
 	}
+}
 
-	// Generate the new TobbyGene
-
-	// Select one spermatoid
-	// This is selected randomly, but in the future I should think of a way to select the "best" spermatoid
-	r1 := rand.New(rand.NewSource(time.Now().UnixNano()))
-	spermatid := spermatids[r1.Intn(len(spermatids))]
-
-	// Generate new Regulator chromosome
-	return &TobbyGene{
-		Regulator: greenman.NewHomologousChromosomes(spermatid.Regulator, ootid.Regulator),
-		Actions:   greenman.NewHomologousChromosomes(spermatid.Actions, ootid.Actions),
+func (genes *TobbyGene) Mutate() {
+	for cont := 0; cont < actionStrandLength; cont++ {
+		if rand.Float64() < mutationChance {
+			log.Println("!!! MUTATION !!!")
+			genes.Actions[cont] = *NewRandomActionGene()
+		}
 	}
 }

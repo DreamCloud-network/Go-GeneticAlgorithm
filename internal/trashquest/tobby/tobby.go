@@ -1,11 +1,10 @@
 package tobby
 
 import (
+	"fmt"
 	"log"
 	"math"
-	"math/rand"
 	"strconv"
-	"time"
 
 	"github.com/GreenMan-Network/Go-GeneticAlgorithm/internal/trashquest/environment"
 	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/landscape"
@@ -60,14 +59,13 @@ func NewTobby() *Tobby {
 		TrashCollected: nil,
 		Fitness:        0,
 		Board:          nil,
-		Genes:          *NewGenes(),
+		Genes:          *NewRandomGenes(),
 		LifeCicle:      0,
 	}
 }
 
 func NewRandomTobby() *Tobby {
 	newTobby := NewTobby()
-	newTobby.Genes.RamdomizeGenes()
 
 	return newTobby
 }
@@ -163,10 +161,7 @@ func (robot *Tobby) ExecuteAction(action Action) error {
 		robot.LifeCicle++
 		return robot.moveWest()
 	case RandomMove:
-		s1 := rand.NewSource(time.Now().UnixNano())
-		r1 := rand.New(s1)
-		ramdonMove := Action(r1.Intn(4) + 2)
-		return robot.ExecuteAction(ramdonMove)
+		return robot.ExecuteAction(GetRandomMove())
 	case Pickup:
 		robot.LifeCicle++
 		return robot.pickupTrash()
@@ -259,8 +254,8 @@ func (robot *Tobby) ReplayASCII() error {
 	log.Println(message)
 
 	for cont := 0; cont < numMoves; cont++ {
-		time.Sleep(1 * time.Second)
-		//fmt.Scanln()
+		//time.Sleep(1 * time.Second)
+		fmt.Scanln()
 
 		positionSignature = robot.getPositionSignature()
 		action := robot.Genes.GetAction(positionSignature)

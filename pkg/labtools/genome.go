@@ -5,8 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
-
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/artificial/dna"
 )
 
 func SaveDNAs(dnas []dna.DNA, filename string) error {

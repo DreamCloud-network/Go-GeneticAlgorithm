@@ -32,7 +32,7 @@ func main() {
 
 	initialBestFitness := 0.0
 
-	for initialBestFitness < 500 {
+	for initialBestFitness <= 500 {
 		csvLine := population.Evolve()
 
 		initialBestFitness = population.Individuals[0].GetFitness()

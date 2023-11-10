@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"sort"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -14,6 +15,7 @@ type Individual interface {
 	Run() error
 	GetFitness() float64
 	Mate(individual Individual) (Individual, error)
+	IsAlive() bool
 }
 
 // Population struct
@@ -53,32 +55,36 @@ func NewPopulation(individuals []Individual) *Population {
 
 // Evaluate executes one session for all the individuals in the population.
 func (population *Population) Evaluate() {
-	/*
-		var wg sync.WaitGroup
 
-		for individualNum := range population.Individuals {
-			wg.Add(1)
-			go func(individual Individual) {
-				// Decrement the counter when the goroutine completes.
-				defer wg.Done()
+	var wg sync.WaitGroup
 
-				err := individual.Run()
-				if err != nil {
-					log.Println("Error running individual.")
-				}
-
-			}(population.Individuals[individualNum])
-		}
-
-		wg.Wait()
-	*/
 	for individualNum := range population.Individuals {
-		err := population.Individuals[individualNum].Run()
-		if err != nil {
-			log.Println("Error running individual: ", individualNum)
-			continue
-		}
+		wg.Add(1)
+		go func(individual Individual) {
+			// Decrement the counter when the goroutine completes.
+			defer wg.Done()
+
+			individual.Run()
+
+			//err := individual.Run()
+			//if err != nil {
+			//log.Println("Error running individual.")
+			//}
+
+		}(population.Individuals[individualNum])
 	}
+
+	wg.Wait()
+
+	/*
+		for individualNum := range population.Individuals {
+			err := population.Individuals[individualNum].Run()
+			if err != nil {
+				//log.Println("Error running individual: ", individualNum)
+				continue
+			}
+		}
+	*/
 }
 
 func (population *Population) selectPartner(fitnessPoints []float64) Individual {
@@ -106,6 +112,8 @@ func (population *Population) selectPartner(fitnessPoints []float64) Individual 
 
 	}
 
+	//log.Println("Index: ", bestRobbot)
+
 	return population.Individuals[bestRobbot]
 }
 
@@ -123,8 +131,12 @@ func (population *Population) prepareFitnessPointsVector() []float64 {
 	// Square the fitness points
 	totalFitnessPoints := 0.0
 	for i := range fitnessPoints {
-		fitnessPoints[i] -= minFitness
-		fitnessPoints[i] = math.Pow(fitnessPoints[i], 2)
+		if minFitness < 0 {
+			fitnessPoints[i] += math.Abs(minFitness)
+		} else {
+			fitnessPoints[i] -= minFitness
+		}
+		//fitnessPoints[i] = math.Pow(fitnessPoints[i], 2)
 		totalFitnessPoints += fitnessPoints[i]
 	}
 
@@ -146,17 +158,17 @@ func (population *Population) Mate() {
 	// Generate a new population
 	newIndividuals := make([]Individual, 0, len(population.Individuals))
 
-	actualPopulationLength := len(population.Individuals)
-
-	for len(newIndividuals) < actualPopulationLength {
+	for len(newIndividuals) < population.InitialSize {
 
 		// Select first partner
+		//log.Println("Partner 1:")
 		partner1 := population.selectPartner(fitnessPoints)
 
 		// Select second partner
 		partner2 := partner1
 
 		// Make sure that the partners are different
+		//log.Println("Partner 2:")
 		for partner1 == partner2 {
 			partner2 = population.selectPartner(fitnessPoints)
 		}
@@ -170,6 +182,41 @@ func (population *Population) Mate() {
 	}
 
 	population.Individuals = newIndividuals
+}
+
+// Returns the number o alive individuals in the population
+func (population *Population) NumAlive() int {
+	numAlive := 0
+	for _, individual := range population.Individuals {
+		if individual.IsAlive() {
+			numAlive++
+		}
+	}
+
+	return numAlive
+}
+
+// Return true if the population has at least one alive individual
+func (population *Population) HasAlive() bool {
+	for _, individual := range population.Individuals {
+		if individual.IsAlive() {
+			return true
+		}
+	}
+	return false
+}
+
+// Removes all the dead individuals from the population
+func (population *Population) removeDeads() {
+	livePopulation := make([]Individual, 0, len(population.Individuals))
+
+	for _, individual := range population.Individuals {
+		if individual.IsAlive() {
+			livePopulation = append(livePopulation, individual)
+		}
+	}
+
+	population.Individuals = livePopulation
 }
 
 // SortPopulation sorts the population by fitness
@@ -213,13 +260,17 @@ func (population *Population) Evolve() []string {
 	population.Evaluate()
 	evaluateTime := time.Since(start)
 
+	population.removeDeads()
+
 	population.sortPopulation()
 
+	lastIndividual := population.Individuals[len(population.Individuals)-1]
 	record := []string{strconv.Itoa(population.Generation), strconv.FormatFloat(population.GetAverageFitness(), 'f', 2, 64),
-		strconv.FormatFloat(population.Individuals[0].GetFitness(), 'f', 2, 64), strconv.FormatFloat(population.Individuals[199].GetFitness(), 'f', 2, 64)}
+		strconv.FormatFloat(population.Individuals[0].GetFitness(), 'f', 2, 64), strconv.FormatFloat(lastIndividual.GetFitness(), 'f', 2, 64)}
 
 	log.Println("=====================")
 	log.Println("Generation: ", record[0])
+	log.Println("Population size: ", len(population.Individuals), " - Alive: ", population.NumAlive())
 	log.Println("Avarage fitness: ", record[1])
 	log.Println("Best fitness: ", record[2])
 	log.Println("Worst fitness: ", record[3])
