@@ -1,7 +1,7 @@
 package vine
 
 import (
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
 )
 
 func (meristem *VineCell) newRootCell() {

@@ -3,8 +3,8 @@ package vine
 import (
 	"log"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
 )
 
 /*func (meristem *VineCell) newMeristemCell() *VineCell {

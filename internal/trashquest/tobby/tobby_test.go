@@ -4,7 +4,7 @@ import (
 	"log"
 	"testing"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/population"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/population"
 )
 
 func TestTobby(t *testing.T) {

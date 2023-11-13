@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place/things"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place/things"
 	"github.com/google/uuid"
 )
 

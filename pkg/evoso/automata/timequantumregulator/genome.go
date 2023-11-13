@@ -1,10 +1,10 @@
 package timequantumregulator
 
 import (
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
 )
 
 var TimeQuantumRegulatorId_Codon codons.Codon = [3]feda.Fid{feda.Onn, feda.Muin, feda.Idad}

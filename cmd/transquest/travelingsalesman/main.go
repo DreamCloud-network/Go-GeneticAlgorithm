@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place/circuit"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/population"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/travelingsalesman"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place/circuit"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/population"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/travelingsalesman"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/landscape"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/thingstype"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/landscape"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/thingstype"
 )
 
 var (

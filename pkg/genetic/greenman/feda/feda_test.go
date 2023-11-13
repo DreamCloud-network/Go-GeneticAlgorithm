@@ -1,6 +1,8 @@
 package feda
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestString(t *testing.T) {
 	t.Log("Testing String()")

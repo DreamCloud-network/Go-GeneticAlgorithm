@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/internal/trashquest/robby"
-	"github.com/GreenMan-Network/Go-Utils/pkg/fileutils"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/internal/trashquest/robby"
+	"github.com/DreamCloud-network/Go-Utils/pkg/fileutils"
 )
 
 func main() {

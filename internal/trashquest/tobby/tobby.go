@@ -6,11 +6,11 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/internal/trashquest/environment"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/landscape"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/landscape/landscape2d"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/thingstype"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/population"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/internal/trashquest/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/landscape"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/landscape/landscape2d"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/thingstype"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/population"
 	"github.com/google/uuid"
 )
 

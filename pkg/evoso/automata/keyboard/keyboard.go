@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/things"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/things"
 )
 
 // This automata is responsible for reaidng the keyboard input and send it in string format to the environment

@@ -3,8 +3,8 @@ package vine
 import (
 	"testing"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place/circuit"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place/things"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place/circuit"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place/things"
 )
 
 func TestVin(t *testing.T) {

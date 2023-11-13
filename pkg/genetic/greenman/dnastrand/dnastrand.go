@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
 )
 
 type DNAStrand []genes.Gene

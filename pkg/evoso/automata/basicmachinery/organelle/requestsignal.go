@@ -1,6 +1,6 @@
 package organelle
 
-import "github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
+import "github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
 
 type RequestSignal struct {
 	environment.Thing

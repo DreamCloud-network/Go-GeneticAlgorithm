@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
 )
 
 func TestGenome(t *testing.T) {

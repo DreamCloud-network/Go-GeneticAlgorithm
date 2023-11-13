@@ -20,6 +20,8 @@ const (
 	KeyboardOutput
 	KeyboardEcho
 	TerminalAutomata
+	Supplier
+	Money
 )
 
 // String returns the string representation of the thing type
@@ -47,6 +49,14 @@ func (thing ThingType) String() (string, error) {
 		return "KeyboardInput", nil
 	case KeyboardOutput:
 		return "KeyboardOutput", nil
+	case KeyboardEcho:
+		return "KeyboardEcho", nil
+	case TerminalAutomata:
+		return "TerminalAutomata", nil
+	case Supplier:
+		return "Supplier", nil
+	case Money:
+		return "Money", nil
 	default:
 		log.Println("items.String - invalid item")
 		err := ErrorInvalidThingType

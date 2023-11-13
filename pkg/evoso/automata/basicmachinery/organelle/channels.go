@@ -1,7 +1,7 @@
 package organelle
 
 import (
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
 )
 
 type Channels struct {

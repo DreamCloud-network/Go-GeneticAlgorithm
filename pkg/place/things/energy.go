@@ -1,7 +1,7 @@
 package things
 
 import (
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
 	"github.com/google/uuid"
 )
 

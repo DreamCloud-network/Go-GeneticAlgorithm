@@ -1,6 +1,6 @@
 package chromosome
 
-import "github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
+import "github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
 
 type Chromosome struct {
 	Father dnastrand.DNAStrand

@@ -4,7 +4,7 @@ import (
 	"log"
 	"testing"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/thingstype"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/thingstype"
 )
 
 func TestBoard(t *testing.T) {

@@ -1,6 +1,6 @@
 package vine
 
-import "github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
+import "github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
 
 func NewVineSeed() *VineCell {
 	newVineSeed := NewVineCell()

@@ -4,7 +4,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
 )
 
 type Codon [3]feda.Fid
@@ -136,4 +136,65 @@ func CodonsToUint(codons []Codon) (uint, error) {
 	}
 
 	return val, err
+}
+
+// UUIDToCodons return the codons that code an UUID.
+func UUIDToCodons(uuid string) ([]Codon, error) {
+	codons := make([]Codon, 0, len(uuid)*3)
+
+	for _, char := range uuid {
+		if char == '-' {
+			codonBuilder := NewBuilder()
+			codonBuilder.AddFid(feda.SPACE)
+			codonBuilder.AddFid(feda.Onn)
+			codonBuilder.AddFid(feda.SPACE)
+
+			codons = append(codons, codonBuilder.GetCodon())
+		} else {
+			fid, err := feda.HexatoFid(char)
+			if err != nil {
+				return nil, err
+			}
+			codonBuilder := NewBuilder()
+			codonBuilder.AddFid(feda.SPACE)
+			codonBuilder.AddFid(fid)
+			codonBuilder.AddFid(feda.SPACE)
+
+			codons = append(codons, codonBuilder.GetCodon())
+		}
+	}
+
+	return codons, nil
+}
+
+// CodonsToUUID return the UUID that is coded by the codons.
+func CodonsToUUID(codons []Codon) (string, error) {
+	if len(codons) == 0 {
+		return "", nil
+	}
+
+	if len(codons) != 36 {
+		return "", ErrInvalidUUIDCodons
+	}
+
+	var newStringBuinder strings.Builder
+
+	for _, codon := range codons {
+		if (codon[0] != feda.SPACE) || (codon[2] != feda.SPACE) {
+			return "", ErrInvalidUUIDCodons
+		}
+
+		if codon[1] == feda.Onn {
+			newStringBuinder.WriteString("-")
+		} else {
+			fid := codon[1]
+			char, err := fid.ToHexa()
+			if err != nil {
+				return "", err
+			}
+			newStringBuinder.WriteString(string(char))
+		}
+	}
+
+	return newStringBuinder.String(), nil
 }

@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
 )
 
 // Helps to build a new codon by adding one feda at a time.

@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/dnastrand"
 )
 
 // Contains the basic functions and genome that must be present in all automata

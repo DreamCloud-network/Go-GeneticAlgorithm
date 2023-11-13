@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
 )
 
 // Circuit is a 2D slice of float64s

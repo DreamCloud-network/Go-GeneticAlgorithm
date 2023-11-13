@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/environment/landscape/landscape2d"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/environment/landscape/landscape2d"
 )
 
 const trashProbability = 50 // %

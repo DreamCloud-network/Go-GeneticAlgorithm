@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/automata/keyboardechoterminal"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/automata/terminal"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/things"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/automata/keyboardechoterminal"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/automata/terminal"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/things"
 )
 
 func TestKeyboardAutoma(t *testing.T) {

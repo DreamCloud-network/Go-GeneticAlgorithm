@@ -3,7 +3,7 @@ package basicmachinery
 import (
 	"testing"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
 )
 
 func TestCollectorGene(t *testing.T) {

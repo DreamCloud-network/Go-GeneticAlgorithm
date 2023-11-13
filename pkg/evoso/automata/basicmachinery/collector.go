@@ -4,9 +4,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/evoso/environment"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/evoso/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/genes"
 )
 
 // Represents the basic struct of any automata active receptor organelle.

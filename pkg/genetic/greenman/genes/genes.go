@@ -4,8 +4,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/codons"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/genetic/greenman/feda"
 )
 
 type Gene struct {
@@ -88,8 +88,8 @@ func (gene *Gene) ReadCode() []codons.Codon {
 
 // Return the codons of the gene.
 func (gene *Gene) ReadCodons() []codons.Codon {
-	gene.Lock()
-	defer gene.Unlock()
+	//gene.Lock()
+	//defer gene.Unlock()
 
 	codonsCode := make([]codons.Codon, 0, len(gene.code)+len(gene.preCode))
 
@@ -118,13 +118,13 @@ func (gene *Gene) Duplicate() *Gene {
 	return newGene
 }
 
-// Return the codons of the gene code region excluding initator and terminator codons.
+// Return the codons of the gene code region excluding initator.
 func (gene *Gene) GetRawCode() []codons.Codon {
 	gene.Lock()
 	defer gene.Unlock()
 
-	rawCodeCodons := make([]codons.Codon, len(gene.code)-2)
-	copy(rawCodeCodons, gene.code[1:len(gene.code)-1])
+	rawCodeCodons := make([]codons.Codon, len(gene.code)-1)
+	copy(rawCodeCodons, gene.code[1:len(gene.code)])
 	return rawCodeCodons
 }
 

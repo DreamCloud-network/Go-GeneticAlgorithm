@@ -4,9 +4,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/place/circuit"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/population"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/place/circuit"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/population"
 )
 
 type TravelingSalesman struct {

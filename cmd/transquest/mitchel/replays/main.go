@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/internal/trashquest/robby"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/internal/trashquest/robby"
 )
 
 //var fileName = "mitchelRobot_original.genes"

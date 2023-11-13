@@ -3,9 +3,9 @@ package main
 import (
 	"time"
 
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/automata/environment"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/automata/keyboard"
-	"github.com/GreenMan-Network/Go-GeneticAlgorithm/pkg/automata/keyboardecho"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/automata/environment"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/automata/keyboard"
+	"github.com/DreamCloud-network/Go-GeneticAlgorithm/pkg/automata/keyboardecho"
 )
 
 func main() {

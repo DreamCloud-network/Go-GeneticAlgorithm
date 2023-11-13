@@ -9,4 +9,5 @@ var (
 	ErrorCodonNotComplete = errors.New("codon not complete")
 	ErrorInvalidState     = errors.New("invalid state")
 	ErrorInvalidAction    = errors.New("invalid action")
+	ErrInvalidUUIDCodons  = errors.New("invalid UUID codons")
 )

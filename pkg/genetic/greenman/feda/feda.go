@@ -244,7 +244,7 @@ func UintToFeda(val uint) []Fid {
 }
 
 // Converts a fid array to a unsigned integer.
-// The most significant digit is on the lefth.
+// The most significant digit is on the left.
 func FedaToUint(feda []Fid) (uint, error) {
 
 	if len(feda) == 0 {
@@ -267,54 +267,82 @@ func FedaToUint(feda []Fid) (uint, error) {
 	return value, nil
 }
 
-/*
-// Converts an unsigned int to a feda array
-// Most significat fid in the left.
-func UintToFeda(val uint) []Fid {
-
-	if val == 0 {
-		return []Fid{Beith}
+// HexatoFid converts a hexa to a fid.
+func HexatoFid(hexa rune) (Fid, error) {
+	switch hexa {
+	case '0':
+		return Beith, nil
+	case '1':
+		return Luis, nil
+	case '2':
+		return Fearn, nil
+	case '3':
+		return Saille, nil
+	case '4':
+		return Nuin, nil
+	case '5':
+		return Uath, nil
+	case '6':
+		return Duir, nil
+	case '7':
+		return Tinne, nil
+	case '8':
+		return Coll, nil
+	case '9':
+		return Cert, nil
+	case 'a':
+		return Muin, nil
+	case 'b':
+		return Gort, nil
+	case 'c':
+		return Getal, nil
+	case 'd':
+		return Straif, nil
+	case 'e':
+		return Ruis, nil
+	case 'f':
+		return Ailm, nil
 	}
 
-	fedaNum := make([]Fid, 0)
-
-	base := uint(Idad) - uint(Beith) + 1
-
-	for val > 0 {
-		remainder := val % base
-		val = val / base
-		if remainder > 0 {
-			newFid := Fid(remainder + uint(Beith))
-			fedaNum = append([]Fid{newFid}, fedaNum...)
-		} else if val > 0 {
-			fedaNum = append([]Fid{Beith}, fedaNum...)
-		}
-	}
-
-	return fedaNum
+	return Peith, ErrInvalidHexa
 }
 
-// Converts a fid array to a unsigned integer.
-// The most significant digit is on the lefth.
-func FedaToUint(feda []Fid) (uint, error) {
-
-	if len(feda) == 0 {
-		return 0, ErrEmptyArray
+// ToHexa converts a fid to a hexa.
+func (f Fid) ToHexa() (rune, error) {
+	switch f {
+	case Beith:
+		return '0', nil
+	case Luis:
+		return '1', nil
+	case Fearn:
+		return '2', nil
+	case Saille:
+		return '3', nil
+	case Nuin:
+		return '4', nil
+	case Uath:
+		return '5', nil
+	case Duir:
+		return '6', nil
+	case Tinne:
+		return '7', nil
+	case Coll:
+		return '8', nil
+	case Cert:
+		return '9', nil
+	case Muin:
+		return 'a', nil
+	case Gort:
+		return 'b', nil
+	case Getal:
+		return 'c', nil
+	case Straif:
+		return 'd', nil
+	case Ruis:
+		return 'e', nil
+	case Ailm:
+		return 'f', nil
 	}
 
-	value := uint(0)
-
-	pot := (uint(len(feda)) - 1)
-
-	base := uint(Idad) - uint(Beith) + 1
-
-	for cont := 0; cont < len(feda); cont++ {
-		fidValue := uint(feda[cont]) - uint(Beith)
-		value += fidValue * uint(math.Pow(float64(base), float64(pot)))
-
-		pot--
-	}
-
-	return value, nil
+	return ' ', ErrInvalidHexa
 }
-*/
