@@ -34,6 +34,11 @@ func (strand *DNAStrand) AddGene(gene *genes.Gene) {
 	*strand = append(*strand, *gene.Duplicate())
 }
 
+// Replace a gene in the chromosome.
+func (strand *DNAStrand) ReplaceGene(pos int, gene *genes.Gene) {
+	(*strand)[pos] = *gene.Duplicate()
+}
+
 // Returns a exact copy of the chromosome.
 func (strand DNAStrand) Duplicate() DNAStrand {
 	newStrand := make([]genes.Gene, len(strand))
